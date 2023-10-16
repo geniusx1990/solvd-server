@@ -1,6 +1,20 @@
 const userService = require('../services/userService');
 const UserController = require('./UserController');
 const bcrypt = require('bcryptjs');
+const { secret } = require('../configs/config');
+const { createJwtToken } = require('../jwt/auth');
+const generateAccessToken = (id, role) => {
+    const expirationInSeconds = 86400;
+    const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+    const expirationTimeInSeconds = currentTimeInSeconds + expirationInSeconds;
+    const payload = {
+        sub: id,
+        role: role,
+        iat: currentTimeInSeconds,
+        exp: expirationTimeInSeconds,
+    };
+    return createJwtToken(payload, secret)
+}
 class AuthController {
     async registration(request, response) {
         try {
@@ -35,10 +49,13 @@ class AuthController {
             const user = await userService.getUserByEmail(email);
             const validPassword = bcrypt.compareSync(password, user.password)
             if (!validPassword) {
-                return response.status(400).json({message: 'Incorrect password'})
-            } else {
-                console.log('passsword OK')
+                return response.status(400).json({ message: 'Incorrect password' })
             }
+            const token = generateAccessToken(user.id, user.role);
+            return response.json({ token });
+            /* else {
+                console.log('passsword OK')
+            } */
 
         } catch (e) {
             console.log(e)

@@ -1,6 +1,4 @@
 const client = require("../configs/database");
-const auth = require('../auth'); // Модуль для создания JWT-токенов
-const requireAuth = require('../auth');
 const UserService = require('../services/userService');
 
 class UserController {
