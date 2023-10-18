@@ -22,6 +22,16 @@ app.use('/auth', authRouter)
 async function startApp() {
   try {
     await client.connect();
+
+    client.query(`
+    DO $$ 
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
+            CREATE TYPE user_role AS ENUM ('Admin', 'User');
+        END IF;
+    END $$;
+    `);
+
     client.query(`
     CREATE TABLE IF NOT EXISTS "users" (
     "id" SERIAL PRIMARY KEY,
@@ -29,31 +39,9 @@ async function startApp() {
     "email" text NOT NULL UNIQUE,
     "password" varchar NOT NULL,
     "phonenumber" text NOT NULL UNIQUE,
-    "role" text NOT NULL
+    "role" user_role
     );
     `);
-
-/*     client.query(`
-    CREATE TABLE IF NOT EXISTS "tasks" (
-    "id" SERIAL PRIMARY KEY,
-    "title" text NOT NULL,
-    "content" text NOT NULL,
-    "priority" text NOT NULL,
-    "completed" text NOT NULL,
-    "user_id" INTEGER, 
-    FOREIGN KEY (user_id) REFERENCES users (id)
-    );
-    `);
-
-    client.query(`
-    CREATE TABLE IF NOT EXISTS "posts" (
-    "id" SERIAL PRIMARY KEY,
-    "content" text NOT NULL,
-    "task_id" INTEGER, 
-    FOREIGN KEY (task_id) REFERENCES tasks (id)
-    );
-    `);
- */
 
 
     console.log("database connected and table created");

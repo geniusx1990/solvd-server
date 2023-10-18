@@ -17,7 +17,7 @@ module.exports = function (request, response, next) {
         try {
             const decodedData = verifyJwtToken(token, secret);
             request.user = decodedData; // Исправлена опечатка
-            console.log('Decoded Data:', decodedData);
+            console.log('Decoded Data:', decodedData.role);
 
             next();
           } catch (error) {
