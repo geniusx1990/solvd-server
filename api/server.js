@@ -2,9 +2,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require("cors");
 const client = require('./configs/database');
-const userRouter = require("./router/router");
-const authRouter = require("./router/authRoutes")
-
+const userRouter = require("./router/userRouter");
+const authRouter = require("./router/authRoutes");
+const markRouter = require("./router/markRouter");
 const app = express()
 app.use(cors());
 
@@ -17,8 +17,9 @@ app.use(
   })
 )
 
-app.use('/api', userRouter)
-app.use('/auth', authRouter)
+app.use('/api', userRouter);
+app.use('/api', markRouter);
+app.use('/auth', authRouter);
 async function startApp() {
   try {
     await client.connect();
