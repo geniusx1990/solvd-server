@@ -73,6 +73,22 @@ class VehicleContoller {
         }
     }
 
+    async getAllVehiclesWithDetails(request, response) {
+        const vehicleId = request.params.id;
+        try {
+            const vehicle = await VehicleService.getVehicleDetailsById(vehicleId);
+            if (vehicle === null) {
+                response.status(404).json({ error: 'Vehicle not found' });
+            } else {
+                response.status(200).json(vehicle);
+            }
+        } catch (error) {
+            console.error('Error fetching vehicle with details:', error);
+            response.status(500).json({ error: 'An error occurred while fetching the vehicle with details.' });
+        }
+    
+    }
+
 
 }
 
