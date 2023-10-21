@@ -5,6 +5,8 @@ const client = require('./configs/database');
 const userRouter = require("./router/userRouter");
 const authRouter = require("./router/authRoutes");
 const markRouter = require("./router/markRouter");
+const modelRouter = require("./router/modelRouter");
+
 const app = express()
 app.use(cors());
 
@@ -19,7 +21,9 @@ app.use(
 
 app.use('/api', userRouter);
 app.use('/api', markRouter);
+app.use('/api', modelRouter);
 app.use('/auth', authRouter);
+
 async function startApp() {
   try {
     await client.connect();
@@ -47,12 +51,12 @@ async function startApp() {
     "role" user_role
     );
 
-    CREATE TABLE IF NOT EXISTS "mark" (
+    CREATE TABLE IF NOT EXISTS "marks" (
       "id" SERIAL PRIMARY KEY,
       "mark" text
     );
 
-    CREATE TABLE IF NOT EXISTS "model" (
+    CREATE TABLE IF NOT EXISTS "models" (
       "id" SERIAL PRIMARY KEY,
       "model" text
     );
@@ -62,8 +66,8 @@ async function startApp() {
       "mark_id" INTEGER,
       "model_id" INTEGER,
       "vehicle_year" INTEGER,
-      FOREIGN KEY (mark_id) REFERENCES mark (id),
-      FOREIGN KEY (model_id) REFERENCES model (id)
+      FOREIGN KEY (mark_id) REFERENCES marks (id),
+      FOREIGN KEY (model_id) REFERENCES models (id)
     );
 
     CREATE TABLE IF NOT EXISTS "parts" (

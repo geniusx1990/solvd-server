@@ -3,7 +3,7 @@ const client = require('../configs/database');
 class MarkService {
     async getAllMarks() {
         try {
-            const queryResult = await client.query('SELECT * FROM mark ORDER BY id ASC');
+            const queryResult = await client.query('SELECT * FROM marks ORDER BY id ASC');
             return queryResult.rows;
 
         } catch (error) {
@@ -15,7 +15,7 @@ class MarkService {
     async createMark(mark) {
         try {
             const queryResult = await client.query(
-                'INSERT INTO mark (mark) VALUES ($1) RETURNING *', [mark]
+                'INSERT INTO marks (mark) VALUES ($1) RETURNING *', [mark]
             );
             return queryResult.rows[0];
         } catch (error) {
@@ -26,7 +26,7 @@ class MarkService {
 
     async getMarkById(markId) {
         try {
-            const queryResult = await client.query('SELECT * FROM mark WHERE id = $1', [markId]);
+            const queryResult = await client.query('SELECT * FROM marks WHERE id = $1', [markId]);
             if (queryResult.rows.length === 0) {
                 return null;
             }
@@ -42,7 +42,7 @@ class MarkService {
 
     async updateMark(id, mark) {
         try {
-            const queryResult = await client.query('UPDATE mark SET mark = $1 WHERE id = $2 RETURNING *', [mark, id]);
+            const queryResult = await client.query('UPDATE marks SET mark = $1 WHERE id = $2 RETURNING *', [mark, id]);
     
             if (queryResult.rows.length === 0) {
                 return null;
@@ -58,7 +58,7 @@ class MarkService {
     
     async deleteMarkById(markId) {
         try {
-            const queryResult = await client.query('DELETE FROM mark WHERE id = $1 RETURNING *', [markId]);
+            const queryResult = await client.query('DELETE FROM marks WHERE id = $1 RETURNING *', [markId]);
 
             if (queryResult.rows.length === 0) {
                 return null;
