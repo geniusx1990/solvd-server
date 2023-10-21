@@ -6,6 +6,7 @@ const userRouter = require("./router/userRouter");
 const authRouter = require("./router/authRoutes");
 const markRouter = require("./router/markRouter");
 const modelRouter = require("./router/modelRouter");
+const vehicleRouter = require("./router/vehicleRouter");
 
 const app = express()
 app.use(cors());
@@ -22,6 +23,7 @@ app.use(
 app.use('/api', userRouter);
 app.use('/api', markRouter);
 app.use('/api', modelRouter);
+app.use('/api', vehicleRouter);
 app.use('/auth', authRouter);
 
 async function startApp() {
