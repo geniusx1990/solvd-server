@@ -61,12 +61,12 @@ class OrderController {
         const orderId = request.params.id
 
         try {
-            const deketedOrder = await OrderService.deleteOrder(orderId);
+            const deletedOrder = await OrderService.deleteOrder(orderId);
 
-            if (deketedOrder === null) {
+            if (deletedOrder === null) {
                 return response.status(404).json({ error: 'Model not found' });
             }
-            response.status(200).json(deketedOrder);
+            response.status(200).json(deletedOrder);
 
         } catch (error) {
             console.error('Error deleting order:', error);

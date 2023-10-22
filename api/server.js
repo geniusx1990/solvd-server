@@ -9,6 +9,7 @@ const modelRouter = require("./router/modelRouter");
 const vehicleRouter = require("./router/vehicleRouter");
 const orderRouter = require("./router/orderRouter");
 const partRouter = require("./router/partRouter");
+const orderPartsRouter = require("./router/orderPartsRouter");
 
 const app = express()
 app.use(cors());
@@ -28,6 +29,7 @@ app.use('/api', modelRouter);
 app.use('/api', vehicleRouter);
 app.use('/api', partRouter);
 app.use('/api', orderRouter);
+app.use('/api', orderPartsRouter);
 app.use('/auth', authRouter);
 
 async function startApp() {
