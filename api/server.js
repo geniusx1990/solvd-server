@@ -7,6 +7,7 @@ const authRouter = require("./router/authRoutes");
 const markRouter = require("./router/markRouter");
 const modelRouter = require("./router/modelRouter");
 const vehicleRouter = require("./router/vehicleRouter");
+const orderRouter = require("./router/orderRouter");
 const partRouter = require("./router/partRouter");
 
 const app = express()
@@ -26,6 +27,7 @@ app.use('/api', markRouter);
 app.use('/api', modelRouter);
 app.use('/api', vehicleRouter);
 app.use('/api', partRouter);
+app.use('/api', orderRouter);
 app.use('/auth', authRouter);
 
 async function startApp() {
@@ -84,14 +86,6 @@ async function startApp() {
       "repair_time" interval,
       "vehicle_id" int,
       FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)
-    );
-
-    CREATE TABLE IF NOT EXISTS "orders" (
-      "id" SERIAL PRIMARY KEY, 
-      "order_date" DATE, 
-      "status" order_status,
-      "user_id" INT,
-      FOREIGN KEY (user_id) REFERENCES users (id)
     );
 
     CREATE TABLE IF NOT EXISTS "orders" (
