@@ -16,6 +16,9 @@ class UserController {
         try {
             const { name, email, password, phonenumber, role } = request.body;
             const newUser = await UserService.createUser(name, email, password, phonenumber, role);
+            if (!newUser) {
+                response.status(400).json({ error: "Invalid user data. Please check the request data and try again." });
+            }
             response.status(201).json(newUser);
         } catch (error) {
             console.error('Error creating user:', error);
@@ -25,6 +28,11 @@ class UserController {
 
     async getUser(request, response) {
         const userId = request.params.id
+
+        if (isNaN(userId)) {
+            response.status(400).json({ error: "Invalid User ID. User ID must be a number." });
+            return;
+        }
         try {
             const user = await UserService.getUserById(userId);
             if (user === null) {
@@ -51,9 +59,9 @@ class UserController {
             if (updatedUser === null) {
                 return response.status(404).json({ error: 'User not found' });
             }
-            response.status(200).json(updatedUser);
+            return response.status(200).json({ message: 'User successfully updated', updatedUser });
         } catch (error) {
-            return response.status(500).json({ error: 'An error occurred while updating the user' });
+            return response.status(500).json({ error: "An error occurred while updating the user" });
         }
     }
 
@@ -66,7 +74,7 @@ class UserController {
             if (deletedUser === null) {
                 return response.status(404).json({ error: 'User not found' });
             }
-            response.status(200).json(deletedUser);
+            return response.status(200).json({ message: 'User successfully deleted', deletedUser });
 
         } catch (error) {
             console.error('Error deleting user:', error);

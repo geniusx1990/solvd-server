@@ -16,8 +16,13 @@ class OrderPartsController {
     async createOrderPart(request, response) {
         try {
             const { order_id, part_id } = request.body;
+
+            if (!order_id || !part_id || typeof order_id !== 'number' || typeof part_id !== 'number') {
+                return response.status(400).json({ error: 'Invalid or missing data in the request' });
+            }
+
             const newOrderPart = await OrderPartsService.addOrderPart(order_id, part_id);
-            response.status(201).json(newOrderPart);
+            response.status(201).json({ message: 'Order part created successfully', orderPart: newOrderPart });
         } catch (error) {
             console.error('Error creating part for order:', error);
             response.status(500).json({ error: 'An error occurred while creating a part for order.' });
@@ -51,7 +56,7 @@ class OrderPartsController {
             if (updatedOrderPart === null) {
                 return response.status(404).json({ error: 'Order part not found' });
             }
-            response.status(200).json(updatedOrderPart);
+            response.status(200).json({ message: 'Order part updated successfully', orderPart: updatedOrderPart });
         } catch (error) {
             return response.status(500).json({ error: 'An error occurred while updating the order part' });
         }
@@ -66,7 +71,9 @@ class OrderPartsController {
             if (deletedOrderPart === null) {
                 return response.status(404).json({ error: 'Order part not found' });
             }
-            response.status(200).json(deletedOrderPart);
+            response.status(200).json({
+                message: "Order part deleted successfully", part: deletedOrderPart
+            });
 
         } catch (error) {
             console.error('Error deleting order part:', error);

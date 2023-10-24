@@ -30,7 +30,7 @@ app.use('/api', vehicleRouter);
 app.use('/api', partRouter);
 app.use('/api', orderRouter);
 app.use('/api', orderPartsRouter);
-app.use('/auth', authRouter);
+app.use('/api/auth', authRouter);
 
 async function startApp() {
   try {

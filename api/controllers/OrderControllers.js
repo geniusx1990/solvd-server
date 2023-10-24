@@ -16,11 +16,15 @@ class OrderController {
     async createOrder(request, response) {
         try {
             const { order_date, status, user_id } = request.body;
+
+            if (!order_date || !status || !user_id || typeof order_date !== 'string' || typeof status !== 'string' || typeof user_id !== 'number') {
+                return response.status(400).json({ error: 'Invalid or missing data in the request' });
+            }
             const newOrder = await OrderService.createOrder(order_date, status, user_id);
-            response.status(201).json(newOrder);
+            response.status(201).json({ message: 'Order created successfully', order: newOrder });
         } catch (error) {
             console.error('Error creating model:', error);
-            response.status(500).json({ error: 'An error occurred while creating a model.' });
+            response.status(500).json({ error: 'An error occurred while creating order.' });
         }
     }
 
@@ -51,7 +55,7 @@ class OrderController {
             if (updatedOrder === null) {
                 return response.status(404).json({ error: 'Order not found' });
             }
-            response.status(200).json(updatedOrder);
+            return response.status(200).json({ message: 'Order updated successfully', order: updatedOrder });
         } catch (error) {
             return response.status(500).json({ error: 'An error occurred while updating the order' });
         }
@@ -66,7 +70,7 @@ class OrderController {
             if (deletedOrder === null) {
                 return response.status(404).json({ error: 'Model not found' });
             }
-            response.status(200).json(deletedOrder);
+            return response.status(200).json({ message: "Order deleted successfully", order: deletedOrder });
 
         } catch (error) {
             console.error('Error deleting order:', error);

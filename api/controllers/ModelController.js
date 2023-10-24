@@ -11,20 +11,23 @@ class ModelController {
             console.error("Error fetching models:", error);
             response.status(500).json({ error: "An error occurred while fetching models." });
         }
-    } 
+    }
 
     async createModel(request, response) {
         try {
             const { model } = request.body;
+            if (!model || typeof model !== 'string') {
+                return response.status(400).json({ error: 'Invalid or missing model data' });
+            }
             const newModel = await ModelService.createModel(model);
-            response.status(201).json(newModel);
+            response.status(201).json({ message: 'Model created successfully', model: newModel });
         } catch (error) {
             console.error('Error creating model:', error);
             response.status(500).json({ error: 'An error occurred while creating a model.' });
         }
     }
 
-   async getModel(request, response) {
+    async getModel(request, response) {
         const modelId = request.params.id;
         try {
             const model = await ModelService.getModelById(modelId);
@@ -51,7 +54,7 @@ class ModelController {
             if (updatedModel === null) {
                 return response.status(404).json({ error: 'Model not found' });
             }
-            response.status(200).json(updatedModel);
+            return response.status(200).json({ message: 'Model updated successfully', updatedModel });
         } catch (error) {
             return response.status(500).json({ error: 'An error occurred while updating the model' });
         }

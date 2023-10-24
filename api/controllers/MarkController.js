@@ -16,8 +16,13 @@ class MarkCtonroller {
     async createMark(request, response) {
         try {
             const { mark } = request.body;
+            if (!mark) {
+                response.status(400).json({ error: 'Invalid input: mark is required' });
+                return;
+            }
+
             const newMark = await MarkService.createMark(mark);
-            response.status(201).json(newMark);
+            response.status(201).json({ mark: newMark, message: 'Mark created successfully' });
         } catch (error) {
             console.error('Error creating mark:', error);
             response.status(500).json({ error: 'An error occurred while creating a mark.' });
@@ -51,7 +56,7 @@ class MarkCtonroller {
             if (updatedMark === null) {
                 return response.status(404).json({ error: 'Mark not found' });
             }
-            response.status(200).json(updatedMark);
+            return response.status(200).json({ message: 'Mark updated successfully', updatedMark });
         } catch (error) {
             return response.status(500).json({ error: 'An error occurred while updating the mark' });
         }
@@ -66,7 +71,7 @@ class MarkCtonroller {
             if (deletedMark === null) {
                 return response.status(404).json({ error: 'Mark not found' });
             }
-            response.status(200).json(deletedMark);
+            return response.status(200).json({ message: 'Mark deleted successfully', deletedMark });
 
         } catch (error) {
             console.error('Error deleting mark:', error);

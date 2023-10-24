@@ -14,10 +14,17 @@ class PartController {
     }
 
     async createPart(request, response) {
+        const { part_name, description, price, availability, repair_cost, repair_time, vehicle_id } = request.body;
+        if (!part_name || !price || isNaN(price) || price <= 0) {
+            return response.status(400).json({ error: 'Invalid input. Please provide valid data and a positive price.' });
+        }
+
         try {
-            const { part_name, description, price, availability, repair_cost, repair_time, vehicle_id } = request.body;
             const newPart = await PartService.createPart(part_name, description, price, availability, repair_cost, repair_time, vehicle_id);
-            response.status(201).json(newPart);
+            response.status(201).json({
+                part: newPart,
+                message: 'Part created successfully',
+            });
         } catch (error) {
             console.error('Error creating part:', error);
             response.status(500).json({ error: 'An error occurred while creating a part.' });
@@ -51,7 +58,10 @@ class PartController {
             if (updatedPart === null) {
                 return response.status(404).json({ error: 'Part not found' });
             }
-            response.status(200).json(updatedPart);
+            response.status(200).json({
+                part: updatedPart,
+                message: 'Part updated successfully'
+            });
         } catch (error) {
             return response.status(500).json({ error: 'An error occurred while updating the part' });
         }
@@ -66,8 +76,10 @@ class PartController {
             if (deletedPart === null) {
                 return response.status(404).json({ error: 'Part not found' });
             }
-            response.status(200).json(deletedPart);
-
+            response.status(200).json({
+                part: deletedPart,
+                message: 'Part deleted successfully',
+            });
         } catch (error) {
             console.error('Error deleting part:', error);
             response.status(500).json({ error: 'An error occurred while deleting the part' });
