@@ -1,4 +1,3 @@
-const client = require("../configs/database");
 const UserService = require('../services/userService');
 
 class UserController {

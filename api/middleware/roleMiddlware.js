@@ -1,4 +1,3 @@
-const { secret } = require('../configs/config');
 const { verifyJwtToken } = require('../jwt/verifyToken');
 
 module.exports = function (role) {
@@ -14,7 +13,7 @@ module.exports = function (role) {
             }
 
             try {
-                const decodedData = verifyJwtToken(token, secret);
+                const decodedData = verifyJwtToken(token, process.env.SECRET);
                 request.user = decodedData;
 
                 let access = false

@@ -8,6 +8,5 @@ router.get('/vehicles', VehicleController.getVehicles);
 router.get('/vehicles/:id', VehicleController.getVehicle);
 router.put('/vehicles', VehicleController.updateVehicle);
 router.delete('/vehicles/:id', VehicleController.deleteVehicle);
-router.get('/vehicles/:id/details', VehicleController.getAllVehiclesWithDetails);
 
 module.exports = router;

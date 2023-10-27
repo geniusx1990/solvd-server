@@ -1,7 +1,6 @@
 const userService = require('../services/userService');
 const UserController = require('./UserController');
 const bcrypt = require('bcryptjs');
-const { secret } = require('../configs/config');
 const { createJwtToken } = require('../jwt/auth');
 const generateAccessToken = (id, role) => {
     const expirationInSeconds = 86400;
@@ -13,7 +12,7 @@ const generateAccessToken = (id, role) => {
         iat: currentTimeInSeconds,
         exp: expirationTimeInSeconds,
     };
-    return createJwtToken(payload, secret)
+    return createJwtToken(payload, process.env.SECRET)
 }
 class AuthController {
     async registration(request, response) {

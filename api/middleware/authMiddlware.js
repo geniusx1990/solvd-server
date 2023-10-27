@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken');
-const { secret } = require('../configs/config');
 const { verifyJwtToken } = require('../jwt/verifyToken');
 
 module.exports = function (request, response, next) {
@@ -15,8 +13,8 @@ module.exports = function (request, response, next) {
         }
 
         try {
-            const decodedData = verifyJwtToken(token, secret);
-            request.user = decodedData; // Исправлена опечатка
+            const decodedData = verifyJwtToken(token, process.env.SECRET);
+            request.user = decodedData;
             console.log('Decoded Data:', decodedData.role);
 
             next();

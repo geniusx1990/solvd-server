@@ -14,11 +14,11 @@ class VehicleContoller {
 
     async createVehicle(request, response) {
         try {
-            const { mark_id, model_id, vehicle_year } = request.body;
-            if (!mark_id || !model_id || !vehicle_year) {
+            const { mark_id, model, vehicle_year } = request.body;
+            if (!mark_id || !model || !vehicle_year) {
                 return response.status(400).json({ error: 'Invalid or missing data in the request' });
             }
-            const newVehicle = await VehicleService.createVehicle(mark_id, model_id, vehicle_year);
+            const newVehicle = await VehicleService.createVehicle(mark_id, model, vehicle_year);
             response.status(201).json({ message: 'Vehicle created successfully', vehicle: newVehicle });
         } catch (error) {
             console.error('Error creating vehicle:', error);
@@ -43,13 +43,13 @@ class VehicleContoller {
 
     async updateVehicle(request, response) {
         const vehicleData = request.body;
-        const { id, mark_id, model_id, vehicle_year } = vehicleData;
+        const { id, mark_id, model, vehicle_year } = vehicleData;
         if (!id) {
             return response.status(400).json({ message: 'ID not specified' });
         }
 
         try {
-            const updatedVehicle = await VehicleService.updateVehicle(id, mark_id, model_id, vehicle_year);
+            const updatedVehicle = await VehicleService.updateVehicle(id, mark_id, model, vehicle_year);
             if (updatedVehicle === null) {
                 return response.status(404).json({ error: 'Vehicle not found' });
             }
@@ -61,10 +61,10 @@ class VehicleContoller {
     }
 
     async deleteVehicle(request, response) {
-        const modelId = request.params.id;
+        const vehicleId = request.params.id;
 
         try {
-            const deletedVehicle = await VehicleService.deleteVehicleById(modelId);
+            const deletedVehicle = await VehicleService.deleteVehicleById(vehicleId);
 
             if (deletedVehicle === null) {
                 return response.status(404).json({ error: 'Vehicle not found' });
@@ -77,23 +77,6 @@ class VehicleContoller {
             return response.status(500).json({ error: 'An error occurred while deleting the vehicle' });
         }
     }
-    
-    async getAllVehiclesWithDetails(request, response) {
-        const vehicleId = request.params.id;
-        try {
-            const vehicle = await VehicleService.getVehicleDetailsById(vehicleId);
-            if (vehicle === null) {
-                response.status(404).json({ error: 'Vehicle not found' });
-            } else {
-                response.status(200).json(vehicle);
-            }
-        } catch (error) {
-            console.error('Error fetching vehicle with details:', error);
-            response.status(500).json({ error: 'An error occurred while fetching the vehicle with details.' });
-        }
-
-    }
-
 
 }
 

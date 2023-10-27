@@ -1,4 +1,3 @@
-const client = require("../configs/database");
 const OrderService = require('../services/orderService');
 
 class OrderController {
@@ -23,7 +22,7 @@ class OrderController {
             const newOrder = await OrderService.createOrder(order_date, status, user_id);
             response.status(201).json({ message: 'Order created successfully', order: newOrder });
         } catch (error) {
-            console.error('Error creating model:', error);
+            console.error('Error creating order:', error);
             response.status(500).json({ error: 'An error occurred while creating order.' });
         }
     }
@@ -68,7 +67,7 @@ class OrderController {
             const deletedOrder = await OrderService.deleteOrder(orderId);
 
             if (deletedOrder === null) {
-                return response.status(404).json({ error: 'Model not found' });
+                return response.status(404).json({ error: 'Order not found' });
             }
             return response.status(200).json({ message: "Order deleted successfully", order: deletedOrder });
 

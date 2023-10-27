@@ -1,4 +1,3 @@
-const client = require("../configs/database");
 const PartService = require('../services/partService');
 
 class PartController {
