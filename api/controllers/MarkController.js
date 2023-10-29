@@ -1,4 +1,3 @@
-const client = require("../configs/database");
 const MarkService = require('../services/markService');
 
 class MarkCtonroller {

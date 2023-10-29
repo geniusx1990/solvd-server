@@ -3,13 +3,25 @@ const PartService = require('../services/partService');
 class PartController {
 
     async getParts(request, response) {
-        try {
-            const parts = await PartService.getAllParts();
-            response.status(200).json(parts);
-        } catch (error) {
-            console.error("Error fetching part:", error);
-            response.status(500).json({ error: "An error occurred while fetching parts." });
+        const { mark_id, model, vehicle_year } = request.query;
+
+        if (mark_id && model && vehicle_year) {
+            try {
+                const filteredParts = await PartService.getPartsForVehicle(mark_id, model, vehicle_year);
+                response.json(filteredParts);
+            } catch (error) {
+                response.status(500).json({ error: 'Internal Server Error' });
+            }
+        } else {
+            try {
+                const parts = await PartService.getAllParts();
+                response.status(200).json(parts);
+            } catch (error) {
+                console.error("Error fetching parts:", error);
+                response.status(500).json({ error: "An error occurred while fetching parts." });
+            }
         }
+
     }
 
     async createPart(request, response) {
