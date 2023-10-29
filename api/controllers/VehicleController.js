@@ -14,11 +14,11 @@ class VehicleContoller {
 
     async createVehicle(request, response) {
         try {
-            const { mark_id, model, vehicle_year } = request.body;
-            if (!mark_id || !model || !vehicle_year) {
+            const { mark_id, vehicle_year } = request.body;
+            if (!mark_id || !vehicle_year) {
                 return response.status(400).json({ error: 'Invalid or missing data in the request' });
             }
-            const newVehicle = await VehicleService.createVehicle(mark_id, model, vehicle_year);
+            const newVehicle = await VehicleService.createVehicle(mark_id, vehicle_year);
             response.status(201).json({ message: 'Vehicle created successfully', vehicle: newVehicle });
         } catch (error) {
             console.error('Error creating vehicle:', error);
@@ -43,13 +43,13 @@ class VehicleContoller {
 
     async updateVehicle(request, response) {
         const vehicleData = request.body;
-        const { id, mark_id, model, vehicle_year } = vehicleData;
+        const { id, mark_id, vehicle_year } = vehicleData;
         if (!id) {
             return response.status(400).json({ message: 'ID not specified' });
         }
 
         try {
-            const updatedVehicle = await VehicleService.updateVehicle(id, mark_id, model, vehicle_year);
+            const updatedVehicle = await VehicleService.updateVehicle(id, mark_id, vehicle_year);
             if (updatedVehicle === null) {
                 return response.status(404).json({ error: 'Vehicle not found' });
             }

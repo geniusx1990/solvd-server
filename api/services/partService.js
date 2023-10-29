@@ -71,16 +71,14 @@ class PartService {
         }
     }
 
-    async getPartsForVehicle(mark_id, model, vehicle_year) {
+    async getPartsForVehicle(mark_id, vehicle_year) {
         try {
           const queryResult = await client.query(`
-            SELECT *
+            SELECT p.*
             FROM parts p
-            JOIN vehicle v ON p.vehicle_id = v.id
-            WHERE v.mark_id = $1
-            AND v.model = $2
-            AND v.vehicle_year = $3;`, 
-            [mark_id, model, vehicle_year]);
+            INNER JOIN vehicle v ON p.vehicle_id = v.id
+            WHERE v.mark_id = $1 AND v.vehicle_year = $2;`, 
+            [mark_id, vehicle_year]);
           return queryResult.rows;
         } catch (error) {
           throw error;

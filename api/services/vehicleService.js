@@ -12,11 +12,11 @@ class VehicleService {
         }
     }
 
-    async createVehicle(mark_id, model, vehicle_year) {
+    async createVehicle(mark_id, vehicle_year) {
         try {
             const queryResult = await client.query(
-                'INSERT INTO vehicle (mark_id, model, vehicle_year) VALUES ($1, $2, $3) RETURNING *',
-                [mark_id, model, vehicle_year]
+                'INSERT INTO vehicle (mark_id, vehicle_year) VALUES ($1, $2) RETURNING *',
+                [mark_id, vehicle_year]
             );
             return queryResult.rows[0];
         } catch (error) {
@@ -41,9 +41,9 @@ class VehicleService {
     }
 
 
-    async updateVehicle(id, mark_id, model, vehicle_year) {
+    async updateVehicle(id, mark_id, vehicle_year) {
         try {
-            const queryResult = await client.query('UPDATE vehicle SET mark_id = $1, model = $2, vehicle_year = $3 WHERE id = $4 RETURNING *', [mark_id, model, vehicle_year, id]);
+            const queryResult = await client.query('UPDATE vehicle SET mark_id = $1, vehicle_year = $2 WHERE id = $3 RETURNING *', [mark_id, vehicle_year, id]);
 
             if (queryResult.rows.length === 0) {
                 return null;

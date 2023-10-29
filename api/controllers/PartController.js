@@ -3,11 +3,11 @@ const PartService = require('../services/partService');
 class PartController {
 
     async getParts(request, response) {
-        const { mark_id, model, vehicle_year } = request.query;
+        const { mark_id, vehicle_year } = request.query;
 
-        if (mark_id && model && vehicle_year) {
+        if (mark_id && vehicle_year) {
             try {
-                const filteredParts = await PartService.getPartsForVehicle(mark_id, model, vehicle_year);
+                const filteredParts = await PartService.getPartsForVehicle(mark_id, vehicle_year);
                 response.json(filteredParts);
             } catch (error) {
                 response.status(500).json({ error: 'Internal Server Error' });

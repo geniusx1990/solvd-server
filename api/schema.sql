@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS users (
     CREATE TABLE IF NOT EXISTS vehicle (
       id SERIAL PRIMARY KEY, 
       mark_id INTEGER,
-      model text,
       vehicle_year INTEGER,
       FOREIGN KEY (mark_id) REFERENCES marks (id)
     );
