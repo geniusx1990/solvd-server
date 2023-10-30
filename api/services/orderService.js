@@ -72,7 +72,26 @@ class OrderService {
     }
 
 
+    async getOrderPartsSummary(orderId) {
+        try {
+            const result = await client.query(`
+            SELECT
+              SUM(p.price) AS total_price,
+              SUM(p.repair_cost) AS total_repair_cost,
+              SUM(EXTRACT(EPOCH FROM p.repair_time)) AS total_repair_time
+            FROM
+              order_parts op
+              INNER JOIN parts p ON op.part_id = p.id
+            WHERE
+              op.order_id = $1;
+          `, [orderId]);
 
+            return result.rows[0];
+        } catch (error) {
+            console.error('Error fetching order parts summary:', error);
+            throw new Error('An error occurred while fetching the order parts summary.');
+        }
+    }
 
 
 }

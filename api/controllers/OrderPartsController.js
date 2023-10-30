@@ -62,10 +62,9 @@ class OrderPartsController {
     }
 
     async deleteOrderPart(request, response) {
-        const orderPartId = request.params.id
-
+        const { order_id, part_id } = request.query; 
         try {
-            const deletedOrderPart = await OrderPartsService.deleteOrderPartById(orderPartId);
+            const deletedOrderPart = await OrderPartsService.deleteOrderPartById(order_id, part_id );
 
             if (deletedOrderPart === null) {
                 return response.status(404).json({ error: 'Order part not found' });

@@ -56,9 +56,9 @@ class OrderPartsService {
         }
     }
 
-    async deleteOrderPartById(orderPartId) {
+    async deleteOrderPartById(order_id, part_id) {
         try {
-            const queryResult = await client.query('DELETE FROM order_parts WHERE id = $1 RETURNING *', [orderPartId]);
+            const queryResult = await client.query('DELETE FROM order_parts WHERE order_id = $1 AND part_id = $2 RETURNING *', [order_id, part_id]);
 
             if (queryResult.rows.length === 0) {
                 return null;

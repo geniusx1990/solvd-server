@@ -29,11 +29,15 @@ class OrderController {
 
     async getOrder(request, response) {
         const orderId = request.params.id;
+    
         try {
             const order = await OrderService.getOrderById(orderId);
             if (order === null) {
                 response.status(404).json({ error: "Order not found." });
             } else {
+                const orderPartsSummary = await OrderService.getOrderPartsSummary(orderId);
+                order.partsSummary = orderPartsSummary;
+    
                 response.status(200).json(order);
             }
         } catch (error) {
@@ -41,7 +45,7 @@ class OrderController {
             response.status(500).json({ error: "An error occurred while fetching the order." });
         }
     }
-
+    
     async updateOrder(request, response) {
         const orderData = request.body;
         const { id, order_date, status, user_id } = orderData;
