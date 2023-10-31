@@ -23,9 +23,10 @@ Content:
    - [Endpoints: orders](#orders)
    - [Endpoints: order-parts](#order-parts)
    - [Endpoints: auth](#auth)
+4. [Database:](#Database)
 
-4. [Download and install App](#Install)
-5. [Run App with Docker](#docker)
+5. [Download and install App](#Install)
+6. [Run App with Docker](#docker)
 
 ## Technical requirements <a name="Technical-requirements"></a>
 
@@ -327,6 +328,47 @@ This request allows you to get all spare parts.
         }
     ]
 ```
+
+`api/parts?mark_id=3&vehicle_year=2000`
+- Query Parameters
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `mark_id=[integer]`| number | Yes      | For filtering by brand  |
+|-----------|--------|----------|--------------|
+| `vehicle_year=[integer]`| number | Yes      | For filtering by year  |
+
+```
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+    [
+      {
+        "id": 83,
+        "part_name": "Air Filter",
+        "description": "Engine air filter for clean air intake",
+        "price": "$8.99",
+        "availability": true,
+        "repair_cost": "$0.00",
+        "repair_time": {
+            "hours": 1
+        },
+        "vehicle_id": 21
+     },
+      {
+        "id": 114,
+        "part_name": "Spark Plugs",
+        "description": "Set of spark plugs for ignition",
+        "price": "$15.99",
+        "availability": true,
+        "repair_cost": "$20.00",
+        "repair_time": {
+            "hours": 1
+        },
+        "vehicle_id": 21
+      }
+    ]
+```
+
 </details>
 
 ### GET Get part
@@ -1508,6 +1550,10 @@ password: The user's password.
 </details>
 
 </details>
+
+
+## Database <a name="Database"></a>
+
 
 
 
