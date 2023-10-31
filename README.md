@@ -23,7 +23,7 @@ Content:
    - [Endpoints: orders](#orders)
    - [Endpoints: order-parts](#order-parts)
    - [Endpoints: auth](#auth)
-4. [Database Schema:](#Database Schema)
+4. [Database Schema](#database)
 
 5. [Download and install App](#Install)
 6. [Run App with Docker](#docker)
@@ -1552,9 +1552,9 @@ password: The user's password.
 </details>
 
 
-## Database Schema <a name="Database Schema"></a>
+## Database Schema <a name="database"></a>
 
-[database scheme](./api/database.png)
+![database scheme](./api/database.png)
 
 #### Table: users
 - `id` SERIAL PRIMARY KEY
