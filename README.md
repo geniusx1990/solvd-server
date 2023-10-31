@@ -23,7 +23,7 @@ Content:
    - [Endpoints: orders](#orders)
    - [Endpoints: order-parts](#order-parts)
    - [Endpoints: auth](#auth)
-4. [Database:](#Database)
+4. [Database Schema:](#Database Schema)
 
 5. [Download and install App](#Install)
 6. [Run App with Docker](#docker)
@@ -1552,23 +1552,91 @@ password: The user's password.
 </details>
 
 
-## Database <a name="Database"></a>
+## Database Schema <a name="Database Schema"></a>
 
+[database scheme](https://monosnap.com/file/muMKRNptB9HMhRlT2NtBIia31Lb99U)
 
+#### Table: users
+- `id` SERIAL PRIMARY KEY
+- `name` text NOT NULL
+- `email` text NOT NULL UNIQUE
+- `password` varchar NOT NULL
+- `phonenumber` text NOT NULL UNIQUE
+- `role` user_role
 
+#### Table: marks
+- `id` SERIAL PRIMARY KEY
+- `mark` text
+
+#### Table: vehicle
+- `id` SERIAL PRIMARY KEY
+- `mark_id` INTEGER
+- `vehicle_year` INTEGER
+- FOREIGN KEY (mark_id) REFERENCES marks (id)
+
+#### Table: parts
+- `id` SERIAL PRIMARY KEY
+- `part_name` text
+- `description` text
+- `price` MONEY
+- `availability` BOOLEAN
+- `repair_cost` MONEY
+- `repair_time` interval
+- `vehicle_id` int
+- FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)
+
+#### Table: orders
+- `id` SERIAL PRIMARY KEY
+- `order_date` DATE
+- `status` order_status
+- `user_id` INT
+- FOREIGN KEY (user_id) REFERENCES users (id)
+
+#### Table: order_parts
+- `id` SERIAL PRIMARY KEY
+- `order_id` INTEGER
+- `part_id` INTEGER
+- FOREIGN KEY (order_id) REFERENCES orders (id)
+- FOREIGN KEY (part_id) REFERENCES parts (id)
+
+### Enum Types
+- `user_role` ENUM ('Admin', 'User')
+- `order_status` ENUM ('confirmed', 'in progress', 'finished')
+
+### Relationships
+
+1. **users** to **orders**
+   - **Relationship**: One-to-Many (1 to N)
+   - **Description**: One user can place multiple orders. The foreign key `user_id` in the "orders" table references the primary key `id` in the "users" table.
+
+2. **marks** to **vehicle**
+   - **Relationship**: One-to-Many (1 to N)
+   - **Description**: One vehicle mark can be associated with multiple vehicles. The foreign key `mark_id` in the "vehicle" table references the primary key `id` in the "marks" table.
+
+3. **vehicle** to **parts**
+   - **Relationship**: One-to-Many (1 to N)
+   - **Description**: One vehicle can have multiple parts associated with it. The foreign key `vehicle_id` in the "parts" table references the primary key `id` in the "vehicle" table.
+
+4. **orders** to **order_parts**
+   - **Relationship**: One-to-Many (1 to N)
+   - **Description**: One order can include multiple parts. The foreign key `order_id` in the "order_parts" table references the primary key `id` in the "orders" table.
+
+5. **parts** to **order_parts**
+   - **Relationship**: One-to-Many (1 to N)
+   - **Description**: One part can be included in multiple orders. The foreign key `part_id` in the "order_parts" table references the primary key `id` in the "parts" table.
 
 ## Install <a name="Install"></a>
 
 Clone this repo with command
 
 ```
-git clone git@github.com:geniusx1990/AutomotiveServiceAssistant.git
+git clone git@github.com:geniusx1990/solvd-server.git
 ```
 
 Go to project folder
 
 ```
-cd AutomotiveServiceAssistant
+cd api
 ```
 
 Install dependencies
