@@ -1554,7 +1554,7 @@ password: The user's password.
 
 ## Database Schema <a name="Database Schema"></a>
 
-[database scheme](https://monosnap.com/file/muMKRNptB9HMhRlT2NtBIia31Lb99U)
+[database scheme](./api/database.png)
 
 #### Table: users
 - `id` SERIAL PRIMARY KEY
