@@ -1617,13 +1617,9 @@ password: The user's password.
    - **Relationship**: One-to-Many (1 to N)
    - **Description**: One vehicle can have multiple parts associated with it. The foreign key `vehicle_id` in the "parts" table references the primary key `id` in the "vehicle" table.
 
-4. **orders** to **order_parts**
-   - **Relationship**: One-to-Many (1 to N)
-   - **Description**: One order can include multiple parts. The foreign key `order_id` in the "order_parts" table references the primary key `id` in the "orders" table.
-
-5. **parts** to **order_parts**
-   - **Relationship**: One-to-Many (1 to N)
-   - **Description**: One part can be included in multiple orders. The foreign key `part_id` in the "order_parts" table references the primary key `id` in the "parts" table.
+4. **orders** to **parts**
+   - **Relationship**: Many-to-Many (N to N)
+   - **Description**: Each order can include multiple parts, and each part can be included in multiple orders. This bidirectional association is facilitated by the use of a junction table named "order_parts.".
 
 ## Install <a name="Install"></a>
 
