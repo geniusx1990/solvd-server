@@ -3,13 +3,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser')
 const cors = require("cors");
 const client = require('./configs/database');
-const userRouter = require("./router/userRouter");
-const authRouter = require("./router/authRoutes");
-const markRouter = require("./router/markRouter");
-const vehicleRouter = require("./router/vehicleRouter");
-const orderRouter = require("./router/orderRouter");
-const partRouter = require("./router/partRouter");
-const orderPartsRouter = require("./router/orderPartsRouter");
+const v1Router = require('./router/v1')
 const app = express()
 app.use(cors());
 
@@ -22,13 +16,7 @@ app.use(
   })
 )
 
-app.use('/api', userRouter);
-app.use('/api', markRouter);
-app.use('/api', vehicleRouter);
-app.use('/api', partRouter);
-app.use('/api', orderRouter);
-app.use('/api', orderPartsRouter);
-app.use('/api/auth', authRouter);
+app.use('/api', v1Router);
 
 async function startApp() {
   try {

@@ -1,0 +1,35 @@
+version: "3"
+
+networks:
+  asa:
+    driver: bridge
+services:
+  server:
+    container_name: server-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    networks:
+      - asa
+  db:
+    container_name: db
+    image: postgres:latest
+    env_file: 
+      - .env
+    volumes:
+      - ${HOME}/asa/postgresql:/data/postgres
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    networks:
+      - asa
