@@ -1,5 +1,4 @@
 const userService = require('../services/userService');
-const UserController = require('./UserController');
 const bcrypt = require('bcryptjs');
 const { createJwtToken } = require('../jwt/auth');
 const generateAccessToken = (id, role) => {
