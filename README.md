@@ -32,9 +32,8 @@ Content:
 
 - Task should be implemented on Javascript
 - Framework - express
-- Web framework - ?React?
 - Database - Postgres
-- Use 19.7 LTS version of Node.js
+- Use v18.15.0 LTS version of Node.js
 - Docker container
 
 ## Implementation details <a name="Implementation-details"></a>
