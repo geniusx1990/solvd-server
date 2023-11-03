@@ -51,9 +51,6 @@ class AuthController {
             }
             const token = generateAccessToken(user.id, user.role);
             return response.json({ token });
-            /* else {
-                console.log('passsword OK')
-            } */
 
         } catch (e) {
             console.log(e)

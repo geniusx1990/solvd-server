@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 const UserController = require('../controllers/UserController');
-const authMiddleware = require('../middleware/authMiddlware');
 const roleMiddleware = require('../middleware/roleMiddlware');
 
 router.post('/users', UserController.createUser);
