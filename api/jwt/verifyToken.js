@@ -1,5 +1,5 @@
 const base64url = require('base64url');
-const crypto = require('crypto');
+const { calculateSignature } = require('./sha256');
 
 function verifyJwtToken(token, secret) {
   const [headerEncoded, payloadEncoded, signature] = token.split('.');
@@ -7,10 +7,7 @@ function verifyJwtToken(token, secret) {
   const header = JSON.parse(base64url.decode(headerEncoded));
   const payload = JSON.parse(base64url.decode(payloadEncoded));
 
-  const computedSignature = crypto
-    .createHmac('sha256', secret)
-    .update(headerEncoded + '.' + payloadEncoded)
-    .digest('base64').replace(/\+/g, '-').replace(/\//g, '_').slice(0, -1);
+  const computedSignature = calculateSignature(headerEncoded + '.' + payloadEncoded, secret)
 
   if (computedSignature !== signature) {
     throw new Error('Invalid token signature');
