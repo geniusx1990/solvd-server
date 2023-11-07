@@ -13,6 +13,16 @@ class OrderPartsService {
 
     async addOrderPart(order_id, part_id) {
         try {
+            const existingOrderPart = await client.query(
+                'SELECT * FROM order_parts WHERE order_id = $1 AND part_id = $2',
+                [order_id, part_id]
+            );
+
+            if (existingOrderPart.rows.length > 0) {
+                return null;
+            }
+
+
             const queryResult = await client.query(
                 'INSERT INTO order_parts (order_id, part_id) VALUES ($1, $2) RETURNING *',
                 [order_id, part_id]
@@ -43,6 +53,26 @@ class OrderPartsService {
 
     async updateOrderPart(id, order_id, part_id) {
         try {
+
+            const existingPart = await client.query(
+                'SELECT * FROM parts WHERE id = $1',
+                [part_id]
+            );
+
+            if (existingPart.rows.length === 0) {
+                return false;
+            }
+
+            const existingOrder = await client.query(
+                'SELECT * FROM orders WHERE id = $1',
+                [order_id]
+            );
+
+            if (existingOrder.rows.length === 0) {
+                return true;
+            }
+
+
             const queryResult = await client.query('UPDATE order_parts SET order_id = $1, part_id = $2 WHERE id = $3 RETURNING *', [order_id, part_id, id]);
 
             if (queryResult.rows.length === 0) {

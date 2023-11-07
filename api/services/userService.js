@@ -18,7 +18,9 @@ class UserService {
                 [name, email, password, phonenumber, role]
             );
 
-            return queryResult.rows[0];
+            const user = queryResult.rows[0];
+
+            return user;
         } catch (error) {
             console.error('Error creating user:', error);
             throw new Error('An error occurred while creating a user.');
@@ -31,7 +33,6 @@ class UserService {
             if (queryResult.rows.length === 0) {
                 return null;
             }
-
             return queryResult.rows[0];
         } catch (error) {
             console.error("Error fetching user:", error);
@@ -44,18 +45,18 @@ class UserService {
     async updateUser(id, name, email, password, phonenumber, role) {
         try {
             const queryResult = await client.query('UPDATE users SET name = $1, email = $2, password = $3, phonenumber = $4, role = $5 WHERE id = $6 RETURNING *', [name, email, password, phonenumber, role, id]);
-    
+
             if (queryResult.rows.length === 0) {
                 return null;
             }
-    
+
             return queryResult.rows[0];
         } catch (error) {
             console.error('Error updating user:', error);
             throw new Error('An error occurred while updating the user.');
         }
     }
-    
+
     async deleteUserById(userId) {
         try {
             const queryResult = await client.query('DELETE FROM users WHERE id = $1 RETURNING *', [userId]);
@@ -76,12 +77,8 @@ class UserService {
             const queryResult = await client.query('SELECT EXISTS (SELECT 1 FROM users WHERE email = $1)', [email]);
             const emailTaken = queryResult.rows[0].exists;
             return (emailTaken)
-/*             if (queryResult.rows.length === 0) {
-                return null;
-            }
 
-            return queryResult.rows[0];
- */        } catch (error) {
+        } catch (error) {
             console.error('Error deleting user:', error);
             throw new Error('An error occurred while deleting the user');
         }
@@ -102,6 +99,23 @@ class UserService {
 
         }
     }
+
+    async getUserByPhone(phonenumber) {
+        try {
+            const queryResult = await client.query('SELECT * FROM users WHERE phonenumber = $1', [phonenumber]);
+            if (queryResult.rows.length === 0) {
+                return null;
+            }
+
+            return queryResult.rows[0];
+        } catch (error) {
+            console.error("Error fetching user:", error);
+            throw new Error('An error occurred while fetching the user.');
+
+
+        }
+    }
+
 
 
 

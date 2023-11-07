@@ -5,20 +5,33 @@ class UserController {
         try {
             const users = await UserService.getAllUsers();
             response.status(200).json(users);
-        } catch (e) {
-            console.error("Error fetching users:", e);
-            response.status(500).json({ e: "An error occurred while fetching users." });
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            response.status(500).json({ error: "An error occurred while fetching users." });
         }
     }
 
     async createUser(request, response) {
+        const { name, email, password, phonenumber, role } = request.body;
+
+        if (!name || !email || !password || !phonenumber || isNaN(phonenumber) || !role) {
+            return response.status(400).json({ error: "Invalid user data. Please check the request data and try again." });
+        }
+
         try {
-            const { name, email, password, phonenumber, role } = request.body;
-            const newUser = await UserService.createUser(name, email, password, phonenumber, role);
-            if (!newUser) {
-                response.status(400).json({ error: "Invalid user data. Please check the request data and try again." });
+            const existingUser = await UserService.getUserByEmail(email);
+            if (existingUser) {
+                return response.status(400).json({ error: 'User with the same email already exists' });
             }
+
+            const existingUserWithPhonenumber = await UserService.getUserByPhone(phonenumber);
+            if (existingUserWithPhonenumber) {
+                return response.status(400).json({ error: 'User with the same phonenumber already exists' });
+            }
+
+            const newUser = await UserService.createUser(name, email, password, phonenumber, role);
             response.status(201).json(newUser);
+            
         } catch (error) {
             console.error('Error creating user:', error);
             response.status(500).json({ error: 'An error occurred while creating a user.' });
@@ -28,10 +41,15 @@ class UserController {
     async getUser(request, response) {
         const userId = request.params.id
 
+        if (!userId) {
+            return response.status(400).json({ message: 'ID not specified' });
+        }
+
         if (isNaN(userId)) {
             response.status(400).json({ error: "Invalid User ID. User ID must be a number." });
             return;
         }
+        
         try {
             const user = await UserService.getUserById(userId);
             if (user === null) {
@@ -49,8 +67,12 @@ class UserController {
     async updateUser(request, response) {
         const user = request.body;
         const { id, name, email, password, phonenumber, role } = user;
-        if (!id) {
+        if (!id || isNaN(id)) {
             return response.status(400).json({ message: 'ID not specified' });
+        }
+
+        if (isNaN(phonenumber)) {
+            return response.status(400).json({ message: 'Please use number for phonenumber' });
         }
 
         try {
@@ -66,6 +88,10 @@ class UserController {
 
     async deleteUser(request, response) {
         const userId = request.params.id
+
+        if (!userId) {
+            return response.status(400).json({ message: 'ID not specified' });
+        }
 
         try {
             const deletedUser = await UserService.deleteUserById(userId);

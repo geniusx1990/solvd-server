@@ -21,17 +21,21 @@ class PartController {
                 response.status(500).json({ error: "An error occurred while fetching parts." });
             }
         }
-
     }
 
     async createPart(request, response) {
         const { part_name, description, price, availability, repair_cost, repair_time, vehicle_id } = request.body;
-        if (!part_name || !price || isNaN(price) || price <= 0) {
+        if (!part_name || !price || !availability || !repair_cost || !repair_time || !vehicle_id || isNaN(vehicle_id) || isNaN(price) || price <= 0 || isNaN(repair_cost) || repair_cost <= 0) {
             return response.status(400).json({ error: 'Invalid input. Please provide valid data and a positive price.' });
         }
 
         try {
             const newPart = await PartService.createPart(part_name, description, price, availability, repair_cost, repair_time, vehicle_id);
+            if (newPart === null) {
+                return response.status(404).json({ error: "This vehicle does not exist." });
+            } else if (newPart === false) {
+                return response.status(409).json({ error: "Part with the same name for this vehicle already exists." });
+            }
             response.status(201).json({
                 part: newPart,
                 message: 'Part created successfully',
@@ -47,7 +51,7 @@ class PartController {
         try {
             const part = await PartService.getPartByID(partId);
             if (part === null) {
-                response.status(404).json({ error: "Part not found." });
+                return response.status(404).json({ error: "Part not found." });
             } else {
                 response.status(200).json(part);
             }
@@ -66,7 +70,12 @@ class PartController {
 
         try {
             const updatedPart = await PartService.updatePart(id, part_name, description, price, availability, repair_cost, repair_time, vehicle_id);
-            if (updatedPart === null) {
+
+            if (updatedPart === true) {
+                return response.status(404).json({ error: "This vehicle does not exist." });
+            } else if (updatedPart === false) {
+                return response.status(409).json({ error: "Part with the same name for this vehicle already exists." });
+            } else if (updatedPart === null) {
                 return response.status(404).json({ error: 'Part not found' });
             }
             response.status(200).json({
@@ -80,7 +89,6 @@ class PartController {
 
     async deletePart(request, response) {
         const partId = request.params.id
-
         try {
             const deletedPart = await PartService.deletePartById(partId);
 

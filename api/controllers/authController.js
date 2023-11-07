@@ -15,22 +15,14 @@ const generateAccessToken = (id, role) => {
 }
 class AuthController {
     async registration(request, response) {
+        const { name, email, password, phonenumber, role } = request.body;
         try {
-            const { name, email, password, phonenumber, role } = request.body;
-
             const hash = bcrypt.hashSync(password, 5);
-
-
-            const emailTaken = await userService.isEmailTaken(email)
-            if (emailTaken) {
-                return response.status(400).json({ message: 'Email is already taken, please use another email' })
-            }
-            //TODO add table roles and find role in this table
             const user = await userService.createUser(name, email, hash, phonenumber, role);
-
             return response.json({ message: 'user registered' });
-        } catch (e) {
-            console.log(e)
+
+        } catch (error) {
+            console.log(error)
             response.status(400).json({ message: 'Registration error' })
         }
     }
@@ -38,8 +30,9 @@ class AuthController {
 
 
     async login(request, response) {
+        const { email, password } = request.body;
+
         try {
-            const { email, password } = request.body;
             const emailTaken = await userService.isEmailTaken(email)
             if (!emailTaken) {
                 return response.status(400).json({ message: `The user with ${email} was not found.` })

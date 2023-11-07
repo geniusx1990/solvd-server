@@ -13,13 +13,17 @@ class OrderController {
     }
 
     async createOrder(request, response) {
-        try {
-            const { order_date, status, user_id } = request.body;
+        const { order_date, status, user_id } = request.body;
 
-            if (!order_date || !status || !user_id || typeof order_date !== 'string' || typeof status !== 'string' || typeof user_id !== 'number') {
-                return response.status(400).json({ error: 'Invalid or missing data in the request' });
-            }
+        if (!order_date || !status || !user_id || typeof order_date !== 'string' || typeof status !== 'string' || typeof user_id !== 'number') {
+            return response.status(400).json({ error: 'Invalid or missing data in the request' });
+        }
+
+        try {
             const newOrder = await OrderService.createOrder(order_date, status, user_id);
+            if (newOrder === null) {
+                return response.status(404).json({ error: "This user does not exist." });
+            }
             response.status(201).json({ message: 'Order created successfully', order: newOrder });
         } catch (error) {
             console.error('Error creating order:', error);
@@ -29,7 +33,7 @@ class OrderController {
 
     async getOrder(request, response) {
         const orderId = request.params.id;
-    
+        
         try {
             const order = await OrderService.getOrderById(orderId);
             if (order === null) {
@@ -37,7 +41,7 @@ class OrderController {
             } else {
                 const orderPartsSummary = await OrderService.getOrderPartsSummary(orderId);
                 order.partsSummary = orderPartsSummary;
-    
+
                 response.status(200).json(order);
             }
         } catch (error) {
@@ -45,17 +49,20 @@ class OrderController {
             response.status(500).json({ error: "An error occurred while fetching the order." });
         }
     }
-    
+
     async updateOrder(request, response) {
-        const orderData = request.body;
-        const { id, order_date, status, user_id } = orderData;
+        const { id, order_date, status, user_id } = request.body;
+        
         if (!id) {
             return response.status(400).json({ message: 'ID not specified' });
         }
 
         try {
             const updatedOrder = await OrderService.updateOrder(id, order_date, status, user_id);
-            if (updatedOrder === null) {
+
+            if (updatedOrder === false) {
+                return response.status(404).json({ error: "This user does not exist." });
+            } else if (updatedOrder === null) {
                 return response.status(404).json({ error: 'Order not found' });
             }
             return response.status(200).json({ message: 'Order updated successfully', order: updatedOrder });

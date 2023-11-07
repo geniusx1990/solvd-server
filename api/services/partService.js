@@ -13,11 +13,28 @@ class PartService {
 
     async createPart(part_name, description, price, availability, repair_cost, repair_time, vehicle_id) {
         try {
+            const existingVehicle = await client.query(
+                'SELECT * FROM vehicle WHERE id = $1',
+                [vehicle_id]
+            );
+
+            if (existingVehicle.rows.length === 0) {
+                return null;
+            }
+
+            const existingPart = await client.query(
+                'SELECT * FROM parts WHERE part_name = $1 AND vehicle_id = $2',
+                [part_name, vehicle_id]
+            );
+
+            if (existingPart.rows.length > 0) {
+                return false;
+            }
+
             const queryResult = await client.query(
                 'INSERT INTO parts (part_name, description, price, availability, repair_cost, repair_time, vehicle_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
                 [part_name, description, price, availability, repair_cost, repair_time, vehicle_id]
             );
-
             return queryResult.rows[0];
         } catch (error) {
             console.error('Error creating part:', error);
@@ -43,7 +60,26 @@ class PartService {
 
     async updatePart(id, part_name, description, price, availability, repair_cost, repair_time, vehicle_id) {
         try {
-            const queryResult = await client.query('UPDATE parts SET part_name = $1, description = $2, price = $3, availability = $4, repair_cost = $5, repair_time = $6, vehicle_id = $7 WHERE id = $8 RETURNING *', [part_name, description, price, availability, repair_cost, repair_time, vehicle_id, id]);
+            const existingVehicle = await client.query(
+                'SELECT * FROM vehicle WHERE id = $1',
+                [vehicle_id]
+            );
+
+            if (existingVehicle.rows.length === 0) {
+                return true;
+            }
+
+            const existingPart = await client.query(
+                'SELECT * FROM parts WHERE part_name = $1 AND vehicle_id = $2',
+                [part_name, vehicle_id]
+            );
+
+            if (existingPart.rows.length > 0) {
+                return false;
+            }
+
+            const queryResult = await client.query('UPDATE parts SET part_name = $1, description = $2, price = $3, availability = $4, repair_cost = $5, repair_time = $6, vehicle_id = $7 WHERE id = $8 RETURNING *',
+                [part_name, description, price, availability, repair_cost, repair_time, vehicle_id, id]);
 
             if (queryResult.rows.length === 0) {
                 return null;
@@ -73,17 +109,17 @@ class PartService {
 
     async getPartsForVehicle(mark_id, vehicle_year) {
         try {
-          const queryResult = await client.query(`
+            const queryResult = await client.query(`
             SELECT p.*
             FROM parts p
             INNER JOIN vehicle v ON p.vehicle_id = v.id
-            WHERE v.mark_id = $1 AND v.vehicle_year = $2;`, 
-            [mark_id, vehicle_year]);
-          return queryResult.rows;
+            WHERE v.mark_id = $1 AND v.vehicle_year = $2;`,
+                [mark_id, vehicle_year]);
+            return queryResult.rows;
         } catch (error) {
-          throw error;
+            throw error;
         }
-      }
+    }
 
 }
 module.exports = new PartService();

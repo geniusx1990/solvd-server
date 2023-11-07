@@ -13,10 +13,16 @@ class MarkCtonroller {
     }
 
     async createMark(request, response) {
+        const { mark } = request.body;
+        if (!mark) {
+            response.status(400).json({ error: 'Invalid input: mark is required' });
+            return;
+        }
+
         try {
-            const { mark } = request.body;
-            if (!mark) {
-                response.status(400).json({ error: 'Invalid input: mark is required' });
+            const existingMark = await MarkService.markExist(mark);
+            if (existingMark) {
+                response.status(409).json({ error: 'Mark already exists' });
                 return;
             }
 

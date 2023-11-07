@@ -14,6 +14,15 @@ class VehicleService {
 
     async createVehicle(mark_id, vehicle_year) {
         try {
+            const existingVehicle = await client.query(
+                'SELECT * FROM vehicle WHERE mark_id = $1 AND vehicle_year = $2',
+                [mark_id, vehicle_year]
+            );
+    
+            if (existingVehicle.rows.length > 0) {
+                return null;
+            }
+
             const queryResult = await client.query(
                 'INSERT INTO vehicle (mark_id, vehicle_year) VALUES ($1, $2) RETURNING *',
                 [mark_id, vehicle_year]
@@ -43,6 +52,15 @@ class VehicleService {
 
     async updateVehicle(id, mark_id, vehicle_year) {
         try {
+            const existingVehicle = await client.query(
+                'SELECT * FROM vehicle WHERE mark_id = $1 AND vehicle_year = $2',
+                [mark_id, vehicle_year]
+            );
+    
+            if (existingVehicle.rows.length > 0) {
+                return false;
+            }
+
             const queryResult = await client.query('UPDATE vehicle SET mark_id = $1, vehicle_year = $2 WHERE id = $3 RETURNING *', [mark_id, vehicle_year, id]);
 
             if (queryResult.rows.length === 0) {

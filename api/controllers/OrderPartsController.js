@@ -13,14 +13,16 @@ class OrderPartsController {
     }
 
     async createOrderPart(request, response) {
+        const { order_id, part_id } = request.body;
+        if (!order_id || !part_id || isNaN(order_id) || isNaN(part_id)) {
+            return response.status(400).json({ error: 'Invalid or missing data in the request' });
+        }
+
         try {
-            const { order_id, part_id } = request.body;
-
-            if (!order_id || !part_id || typeof order_id !== 'number' || typeof part_id !== 'number') {
-                return response.status(400).json({ error: 'Invalid or missing data in the request' });
-            }
-
             const newOrderPart = await OrderPartsService.addOrderPart(order_id, part_id);
+            if (newOrderPart === null) {
+                return response.status(409).json({ error: 'This part already exists in this order' });
+            }
             response.status(201).json({ message: 'Order part created successfully', orderPart: newOrderPart });
         } catch (error) {
             console.error('Error creating part for order:', error);
@@ -44,15 +46,18 @@ class OrderPartsController {
     }
 
     async updateOrder(request, response) {
-        const orderPartsData = request.body;
-        const { id, order_id, part_id } = orderPartsData;
+        const { id, order_id, part_id } = request.body;
         if (!id) {
             return response.status(400).json({ message: 'ID not specified' });
         }
 
         try {
             const updatedOrderPart = await OrderPartsService.updateOrderPart(id, order_id, part_id);
-            if (updatedOrderPart === null) {
+            if (updatedOrderPart === false) {
+                return response.status(404).json({ error: "This part doesn't exist." });
+            } else if (updatedOrderPart === true) {
+                return response.status(404).json({ error: "This order doesn't exist." });
+            } else if (updatedOrderPart === null) {
                 return response.status(404).json({ error: 'Order part not found' });
             }
             response.status(200).json({ message: 'Order part updated successfully', orderPart: updatedOrderPart });
@@ -62,9 +67,9 @@ class OrderPartsController {
     }
 
     async deleteOrderPart(request, response) {
-        const { order_id, part_id } = request.query; 
+        const { order_id, part_id } = request.query;
         try {
-            const deletedOrderPart = await OrderPartsService.deleteOrderPartById(order_id, part_id );
+            const deletedOrderPart = await OrderPartsService.deleteOrderPartById(order_id, part_id);
 
             if (deletedOrderPart === null) {
                 return response.status(404).json({ error: 'Order part not found' });

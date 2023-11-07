@@ -43,11 +43,11 @@ class MarkService {
     async updateMark(id, mark) {
         try {
             const queryResult = await client.query('UPDATE marks SET mark = $1 WHERE id = $2 RETURNING *', [mark, id]);
-    
+
             if (queryResult.rows.length === 0) {
                 return null;
             }
-    
+
             return queryResult.rows[0];
         } catch (error) {
             console.error('Error updating mark:', error);
@@ -55,7 +55,7 @@ class MarkService {
         }
     }
 
-    
+
     async deleteMarkById(markId) {
         try {
             const queryResult = await client.query('DELETE FROM marks WHERE id = $1 RETURNING *', [markId]);
@@ -68,6 +68,16 @@ class MarkService {
         } catch (error) {
             console.error('Error deleting mark:', error);
             throw new Error('An error occurred while deleting the mark');
+        }
+    }
+
+    async markExist(mark) {
+        try {
+            const queryResult = await client.query('SELECT COUNT(*) FROM marks WHERE mark = $1', [mark]);
+            return queryResult.rows[0].count > 0;
+        } catch (error) {
+            console.log('Error checking if mark exist:', error);
+            throw new Error('An error occured while checking if the mark exist');
         }
     }
 
