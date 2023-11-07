@@ -7,7 +7,6 @@ class MarkCtonroller {
             const marks = await MarkService.getAllMarks();
             response.status(200).json(marks);
         } catch (error) {
-            console.error("Error fetching marks:", error);
             response.status(500).json({ error: "An error occurred while fetching marks." });
         }
     }

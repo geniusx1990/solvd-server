@@ -39,7 +39,6 @@ class MarkService {
         }
     }
 
-
     async updateMark(id, mark) {
         try {
             const queryResult = await client.query('UPDATE marks SET mark = $1 WHERE id = $2 RETURNING *', [mark, id]);

@@ -5,21 +5,17 @@ class PartController {
     async getParts(request, response) {
         const { mark_id, vehicle_year } = request.query;
 
-        if (mark_id && vehicle_year) {
-            try {
+        try {
+            if (mark_id && vehicle_year) {
                 const filteredParts = await PartService.getPartsForVehicle(mark_id, vehicle_year);
-                response.json(filteredParts);
-            } catch (error) {
-                response.status(500).json({ error: 'Internal Server Error' });
-            }
-        } else {
-            try {
+                response.status(200).json(filteredParts);
+            } else {
                 const parts = await PartService.getAllParts();
                 response.status(200).json(parts);
-            } catch (error) {
-                console.error("Error fetching parts:", error);
-                response.status(500).json({ error: "An error occurred while fetching parts." });
             }
+        } catch (error) {
+            console.error("Error fetching parts:", error);
+            response.status(500).json({ error: "An error occurred while fetching parts." });
         }
     }
 
