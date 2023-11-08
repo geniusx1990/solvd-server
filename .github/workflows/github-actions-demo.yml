@@ -17,9 +17,13 @@ jobs:
         run: cd ./api
       - name: install modules
         run: npm install
+        working-directory: ./api
       - name: start project
         run: npm run start
+        working-directory: ./api
       - name: test project
         run: npm run test
+        working-directory: ./api
       - name: test coverage
         run: npm run coverage
+        working-directory: ./api
