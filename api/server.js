@@ -22,9 +22,13 @@ async function startApp() {
   try {
     await client.connect();
     const sqlScript = fs.readFileSync('schema.sql', 'utf8');
+//  const insertDataSql = fs.readFileSync('data.sql', 'utf8');
     await client.query(sqlScript);
 
     console.log("database connected and table created");
+  /*   await client.query(insertDataSql);
+    console.log("Data inserted"); */
+
   } catch (e) {
     console.log(e)
   }

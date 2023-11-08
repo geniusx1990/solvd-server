@@ -54,7 +54,6 @@ class MarkService {
         }
     }
 
-
     async deleteMarkById(markId) {
         try {
             const queryResult = await client.query('DELETE FROM marks WHERE id = $1 RETURNING *', [markId]);
@@ -66,7 +65,7 @@ class MarkService {
             return queryResult.rows[0];
         } catch (error) {
             console.error('Error deleting mark:', error);
-            throw new Error('An error occurred while deleting the mark');
+            throw new Error('An error occurred while deleting the mark.');
         }
     }
 
@@ -79,8 +78,6 @@ class MarkService {
             throw new Error('An error occured while checking if the mark exist');
         }
     }
-
-
 
 }
 
