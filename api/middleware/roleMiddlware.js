@@ -7,7 +7,7 @@ module.exports = function (role) {
         }
         try {
             const token = request.headers.authorization.split(' ')[1];
-            console.log(token)
+
             if (!token) {
                 return response.status(403).json({ message: 'User is not authorized' });
             }
@@ -15,7 +15,6 @@ module.exports = function (role) {
             try {
                 const decodedData = verifyJwtToken(token, process.env.SECRET);
                 request.user = decodedData;
-
                 let access = false
 
                 if (decodedData.role === role) {
