@@ -235,7 +235,8 @@ describe('OrderParstController - unit tests', () => {
         });
 
         it('should return code 500 on internal server error', async () => {
-
+            const response = httpMocks.createResponse();
+            const request = httpMocks.createRequest();
 
             const errorMessage = 'Internal server error';
             const mockError = new Error(errorMessage);
