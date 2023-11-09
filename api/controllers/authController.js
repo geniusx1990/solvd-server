@@ -13,6 +13,7 @@ const generateAccessToken = (id, role) => {
     };
     return createJwtToken(payload, process.env.SECRET)
 }
+
 class AuthController {
     async registration(request, response) {
         const { name, email, password, phonenumber, role } = request.body;
