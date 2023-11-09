@@ -54,6 +54,8 @@ describe('Part Controller', function () {
         });
 
         it('should handle errors and return a 500 status', async () => {
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
             const getAllPartsSpy = jest.spyOn(PartService, 'getAllParts').mockRejectedValue(new Error('Test Error'));
 
             const request = {
@@ -231,6 +233,8 @@ describe('Part Controller', function () {
 
         it('should handle errors and return a 500 status', async () => {
             const partId = 1;
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
 
             const getPartByIDSpy = jest.spyOn(PartService, 'getPartByID').mockRejectedValue(new Error('Test Error'));
 
@@ -408,6 +412,9 @@ describe('Part Controller', function () {
         });
 
         it('should handle errors and return a 500 status', async () => {
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
+
             const partData = {
                 id: 1,
                 part_name: 'Updated Part',
@@ -492,6 +499,8 @@ describe('Part Controller', function () {
         });
 
         it('should handle errors and return a 500 status', async () => {
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
             const partId = 1;
 
             const deletePartByIdSpy = jest.spyOn(PartService, 'deletePartById').mockRejectedValue(new Error('Test Error'));

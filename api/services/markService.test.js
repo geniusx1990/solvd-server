@@ -14,8 +14,10 @@ describe('Mark Service', () => {
 
             const mockQueryData = {
                 rows: [
-                    { id: 1, name: 'Audi' },
-                    { id: 2, name: 'Mercedes-Benz' },
+                    {
+                        "id": 4,
+                        "mark": "Audi"
+                    }
                 ],
             };
             client.query.mockResolvedValue(mockQueryData);

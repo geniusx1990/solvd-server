@@ -25,6 +25,9 @@ describe('User Controller', function () {
         });
 
         it('should handle errors and return a 500 status', async () => {
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
+
             const getAllUsersSpy = jest.spyOn(UserService, 'getAllUsers').mockRejectedValue(new Error('Test Error'));
 
             const request = {};
@@ -165,6 +168,9 @@ describe('User Controller', function () {
         });
 
         it('should handle errors and return a 500 status', async () => {
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
+
             const userData = {
                 name: 'Alex',
                 email: 'alex@gmail.com',
@@ -276,6 +282,9 @@ describe('User Controller', function () {
         });
 
         it('should handle errors and return a 500 status', async () => {
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
+
             const userId = 1;
             const getUserByIdSpy = jest.spyOn(UserService, 'getUserById').mockRejectedValue(new Error('Test Error'));
 
@@ -415,6 +424,9 @@ describe('User Controller', function () {
         });
 
         it('should handle errors and return a 500 status', async () => {
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
+
             const userData = {
                 id: 1,
                 name: 'Ivan',
@@ -510,6 +522,9 @@ describe('User Controller', function () {
         });
 
         it('should handle errors and return a 500 status', async () => {
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
+
             const userId = 1;
 
             const deleteUserByIdSpy = jest.spyOn(UserService, 'deleteUserById').mockRejectedValue(new Error('Test Error'));

@@ -39,8 +39,7 @@ class OrderController {
             if (order === null) {
                 response.status(404).json({ error: "Order not found." });
             } else {
-                const orderPartsSummary = await OrderService.getOrderPartsSummary(orderId);
-                order.partsSummary = orderPartsSummary;
+                order.partsSummary = await OrderService.getOrderPartsSummary(orderId);
 
                 response.status(200).json(order);
             }

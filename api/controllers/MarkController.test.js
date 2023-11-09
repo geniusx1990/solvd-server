@@ -126,6 +126,8 @@ describe('Mark Controller', function () {
 
         it('should handle errors and return a 500 status', async () => {
             const mark = 'Mercedes-Benz';
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
 
             const markExistSpy = jest.spyOn(MarkService, 'markExist').mockRejectedValue(new Error('Test Error'));
 
@@ -191,6 +193,8 @@ describe('Mark Controller', function () {
 
         it('should handle errors and return a 500 status', async () => {
             const markId = 1;
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
             const getMarkByIdSpy = jest.spyOn(MarkService, 'getMarkById').mockRejectedValue(new Error('Test Error'));
 
             const request = {
@@ -268,6 +272,8 @@ describe('Mark Controller', function () {
 
         it('should handle errors and return a 500 status', async () => {
             const markData = { id: 1, mark: 'KIA' };
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
             const updateMarkSpy = jest.spyOn(MarkService, 'updateMark').mockRejectedValue(new Error('Test Error'));
 
             const request = {
@@ -331,6 +337,8 @@ describe('Mark Controller', function () {
 
         it('should handle errors and return a 500 status', async () => {
             const markId = 1;
+            const originalConsoleError = console.error;
+            console.error = jest.fn();
             const deleteMarkByIdSpy = jest.spyOn(MarkService, 'deleteMarkById').mockRejectedValue(new Error('Test Error'));
 
             const request = {
