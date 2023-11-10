@@ -1,4 +1,6 @@
+const {describe, it, expect} = require("@jest/globals");
 const httpMocks = require('node-mocks-http');
+
 jest.mock('../services/orderPartsService');
 
 const OrderPartsService = require('../services/orderPartsService');
@@ -377,9 +379,6 @@ describe('OrderParstController - unit tests', () => {
             const responseData = response._getJSONData();
             expect(responseData.error).toEqual('An error occurred while updating the order part');
         });
-
-
-
 
     });
 

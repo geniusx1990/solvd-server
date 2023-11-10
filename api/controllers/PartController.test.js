@@ -1,7 +1,7 @@
+const {describe, it, expect} = require("@jest/globals");
+
 const PartController = require('./PartController');
 const PartService = require('../services/partService');
-const UserService = require("../services/userService");
-const UserController = require("./UserController");
 
 describe('Part Controller', function () {
     describe('getParts', function () {

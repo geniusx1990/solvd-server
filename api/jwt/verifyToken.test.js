@@ -1,3 +1,4 @@
+const {describe, it, expect} = require("@jest/globals");
 const { verifyJwtToken } = require('./verifyToken');
 const { createJwtToken } = require('./auth');
 describe('verifyJwtToken', () => {

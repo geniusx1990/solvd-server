@@ -1,3 +1,5 @@
+const {describe, it, expect} = require("@jest/globals");
+
 const UserController = require('./UserController');
 const UserService = require('../services/userService');
 

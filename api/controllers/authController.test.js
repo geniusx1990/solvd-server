@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs');
+const {describe, it, expect} = require("@jest/globals");
+
 const httpMocks = require('node-mocks-http');
 const AuthController = require('./authController');
 const UserService = require('../services/userService');

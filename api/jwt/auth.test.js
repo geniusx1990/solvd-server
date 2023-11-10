@@ -1,4 +1,5 @@
 const { createJwtToken } = require('./auth');
+const {describe, it, expect} = require("@jest/globals");
 
 describe('createJwtToken', () => {
     it('should create a JWT token with the correct header and payload', () => {

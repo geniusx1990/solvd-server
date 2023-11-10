@@ -1,4 +1,5 @@
 const httpMocks = require('node-mocks-http');
+const {describe, it, expect} = require("@jest/globals");
 jest.mock('../services/vehicleService');
 
 const VehicleService = require('../services/vehicleService');

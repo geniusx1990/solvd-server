@@ -1,4 +1,6 @@
 const MarkService = require('./markService');
+const {describe, it, expect} = require("@jest/globals");
+
 const client = require('../configs/database');
 
 jest.mock('../configs/database');
