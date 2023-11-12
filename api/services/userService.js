@@ -17,10 +17,7 @@ class UserService {
                 'INSERT INTO users (name, email, password, phonenumber, role) VALUES ($1, $2, $3, $4, $5) RETURNING *',
                 [name, email, password, phonenumber, role]
             );
-
-            const user = queryResult.rows[0];
-
-            return user;
+            return queryResult.rows[0];
         } catch (error) {
             console.error('Error creating user:', error);
             throw new Error('An error occurred while creating a user.');
@@ -37,8 +34,6 @@ class UserService {
         } catch (error) {
             console.error("Error fetching user:", error);
             throw new Error('An error occurred while fetching the user.');
-
-
         }
     }
 
@@ -111,13 +106,9 @@ class UserService {
         } catch (error) {
             console.error("Error fetching user:", error);
             throw new Error('An error occurred while fetching the user.');
-
-
         }
     }
 
-
-
-
 }
+
 module.exports = new UserService();

@@ -53,8 +53,6 @@ class PartService {
         } catch (error) {
             console.error("Error fetching part:", error);
             throw new Error('An error occurred while fetching the part.');
-
-
         }
     }
 
@@ -122,4 +120,5 @@ class PartService {
     }
 
 }
+
 module.exports = new PartService();

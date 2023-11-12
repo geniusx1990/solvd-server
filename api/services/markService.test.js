@@ -13,7 +13,6 @@ describe('Mark Service', () => {
 
     describe('getAllMarks', () => {
         it('should list marks', async () => {
-
             const mockQueryData = {
                 rows: [
                     {
@@ -31,6 +30,7 @@ describe('Mark Service', () => {
         it('should handle the error and throw an exception', async () => {
             const errorMessage = 'Database error';
             client.query.mockRejectedValue(new Error(errorMessage));
+            jest.spyOn(console, 'error').mockImplementation(() => {});
 
             try {
                 await MarkService.getAllMarks();
@@ -98,6 +98,8 @@ describe('Mark Service', () => {
             const errorMessage = 'Database error';
             client.query.mockRejectedValue(new Error(errorMessage));
 
+            jest.spyOn(console, 'error').mockImplementation(() => {});
+
             try {
                 await MarkService.getMarkById(mockMarkId);
             } catch (error) {
@@ -138,6 +140,8 @@ describe('Mark Service', () => {
             const mockNewMark = 'KIA';
             const errorMessage = 'Database error';
             client.query.mockRejectedValue(new Error(errorMessage));
+
+            jest.spyOn(console, 'error').mockImplementation(() => {});
 
             try {
                 await MarkService.updateMark(mockMarkId, mockNewMark);
@@ -185,5 +189,4 @@ describe('Mark Service', () => {
             }
         });
     });
-
 });

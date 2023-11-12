@@ -45,8 +45,6 @@ class OrderService {
         } catch (error) {
             console.error("Error fetching order:", error);
             throw new Error('An error occurred while fetching the order.');
-
-
         }
     }
 
@@ -113,4 +111,5 @@ class OrderService {
 
 
 }
+
 module.exports = new OrderService();

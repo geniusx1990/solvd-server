@@ -5,7 +5,6 @@ class VehicleService {
         try {
             const queryResult = await client.query('SELECT * FROM vehicle ORDER BY id ASC');
             return queryResult.rows;
-
         } catch (error) {
             console.error('Error fetching vehicles:', error);
             throw new Error('An error occurred while fetching vehicles.');
@@ -18,7 +17,7 @@ class VehicleService {
                 'SELECT * FROM vehicle WHERE mark_id = $1 AND vehicle_year = $2',
                 [mark_id, vehicle_year]
             );
-    
+
             if (existingVehicle.rows.length > 0) {
                 return null;
             }
@@ -40,12 +39,10 @@ class VehicleService {
             if (queryResult.rows.length === 0) {
                 return null;
             }
-
             return queryResult.rows[0];
         } catch (error) {
             console.error("Error fetching vehicle:", error);
             throw new Error('An error occurred while fetching the vehicle.');
-
         }
     }
 
@@ -56,18 +53,18 @@ class VehicleService {
                 'SELECT * FROM vehicle WHERE mark_id = $1 AND vehicle_year = $2',
                 [mark_id, vehicle_year]
             );
-    
+
             if (existingVehicle.rows.length > 0) {
                 return false;
             }
 
             const queryResult = await client.query('UPDATE vehicle SET mark_id = $1, vehicle_year = $2 WHERE id = $3 RETURNING *', [mark_id, vehicle_year, id]);
 
-            if (queryResult.rows.length === 0) {
+            if (queryResult && queryResult.rows && queryResult.rows.length > 0) {
+                return queryResult.rows[0];
+            } else {
                 return null;
             }
-
-            return queryResult.rows[0];
         } catch (error) {
             console.error('Error updating vehicle:', error);
             throw new Error('An error occurred while updating the vehicle.');
