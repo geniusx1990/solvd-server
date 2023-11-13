@@ -219,6 +219,18 @@ Example request body:
     error: "User not found." 
   }
 
+  HTTP/1.1 400 Bad Request
+  Content-Type: application/json
+  {
+    error: "ID not specified" 
+  }
+
+  HTTP/1.1 400 Bad Request
+  Content-Type: application/json
+  {
+    error: "Please use number for phonenumber" 
+  }
+
   HTTP/1.1 500 Internal Server Error
   Content-Type: application/json
   {
@@ -262,6 +274,12 @@ This endpoint allows you to delete a single user by ID.
     Content-Type: application/json
     {
         error: "User not found"
+    }
+    
+    HTTP/1.1 400 Bad Request
+    Content-Type: application/json
+    {
+        error: "ID not specified"
     }
 
     HTTP/1.1 500 Internal Server Error
@@ -467,6 +485,18 @@ Header:
     error: 'Invalid input. Please provide valid data and a positive price.'
   }
 
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json
+  {
+    error: 'This vehicle does not exist.'
+  }
+
+  HTTP/1.1 409 Conflict
+  Content-Type: application/json
+  {
+    error: 'Part with the same name for this vehicle already exists.'
+  }
+
    HTTP/1.1 500 Internal Server Error
    Content-Type: application/json
   {
@@ -518,6 +548,18 @@ This request allows to update a part. The request
   Content-Type: application/json
   {
     error: 'Part not found'
+  }
+  
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json
+  {
+    error: 'This vehicle does not exist.'
+  }
+
+  HTTP/1.1 409 Conflict
+  Content-Type: application/json
+  {
+    error: 'Part with the same name for this vehicle already exists.'
   }
 
   HTTP/1.1 500 Internal Server Error
@@ -680,8 +722,14 @@ The request body should contain the required information
     error: 'Invalid input: mark is required.'
   }
 
-   HTTP/1.1 500 Internal Server Error
-   Content-Type: application/json
+  HTTP/1.1 409 Conflict
+  Content-Type: application/json
+  {
+    error: 'Mark already exists'
+  }
+
+  HTTP/1.1 500 Internal Server Error
+  Content-Type: application/json
   {
     error: "An error occurred while creating a mark."
   }
@@ -769,18 +817,18 @@ This endpoint allows you to delete a single mark by ID.
 * **Error Response:**
 
 ```
-    HTTP/1.1 404 Not Found
-    Content-Type: application/json
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json
 
-    {
-      error: "Mark not found"
-    }
+  {
+    error: "Mark not found"
+  }
 
-    HTTP/1.1 500 Internal Server Error
-    Content-Type: application/json
-    {
-      error: "An error occurred while deleting the mark."
-    }
+  HTTP/1.1 500 Internal Server Error
+  Content-Type: application/json
+  {
+    error: "An error occurred while deleting the mark."
+  }
 ```
 </details>
 </details>
@@ -795,7 +843,6 @@ This endpoint allows you to delete a single mark by ID.
 <details>
 
 This endpoint allows you to get a list of vehicles.
-
 
 * **Success Response:**
 
@@ -844,17 +891,17 @@ This endpoint allows you to retrieve a single vehicle by ID.
 * **Error Response:**
 
 ```
-    HTTP/1.1 404 Not Found
-    Content-Type: application/json
-    {
-      error: "Vehicle not found." 
-    }
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json
+  {
+    error: "Vehicle not found." 
+  }
 
-    HTTP/1.1 500 Internal Server Error
-    Content-Type: application/json
-    {
-      error: "An error occurred while fetching the vehicle."
-    }
+  HTTP/1.1 500 Internal Server Error
+  Content-Type: application/json
+  {
+    error: "An error occurred while fetching the vehicle."
+  }
 ```
 </details>
 
@@ -896,8 +943,14 @@ for creating a new vehicle, such as mark_id, vehicle year.
     error: 'Invalid or missing data in the request.'
   }
 
-   HTTP/1.1 500 Internal Server Error
-   Content-Type: application/json
+  HTTP/1.1 409 Conflict
+  Content-Type: application/json
+  {
+    error: 'Vehicle with the same mark and vehicle_year already exists'
+  }
+
+  HTTP/1.1 500 Internal Server Error
+  Content-Type: application/json
   {
     error: "An error occurred while creating a vehicle."
   }
@@ -949,7 +1002,13 @@ Example request body:
     error: 'Vehicle not found'
   }
 
-   HTTP/1.1 500 Internal Server Error
+  HTTP/1.1 409 Conflict
+  Content-Type: application/json
+  {
+    error: 'Vehicle with the same mark and vehicle_year already exists'
+  }
+
+  HTTP/1.1 500 Internal Server Error
   Content-Type: application/json
   {
     error: "An error occurred while updating the vehicle."
@@ -1121,6 +1180,12 @@ for creating a new order, such as order date, status, user id.
     error: 'Invalid or missing data in the request.'
   }
 
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json
+  {
+    error: 'This user does not exist.'
+  }
+
    HTTP/1.1 500 Internal Server Error
    Content-Type: application/json
   {
@@ -1174,6 +1239,12 @@ Example request body:
   Content-Type: application/json
   {
     error: 'Order not found'
+  }
+
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json
+  {
+    error: 'This user does not exist.'
   }
 
   HTTP/1.1 500 Internal Server Error
@@ -1288,17 +1359,17 @@ This endpoint allows you to retrieve a single order part by ID.
 * **Error Response:**
 
 ```
-    HTTP/1.1 404 Not Found
-    Content-Type: application/json
-    {
-      error: "Order part not found." 
-    }
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json
+  {
+    error: "Order part not found." 
+  }
 
-    HTTP/1.1 500 Internal Server Error
-    Content-Type: application/json
-    {
-      error: "An error occurred while fetching order parts."
-    }
+  HTTP/1.1 500 Internal Server Error
+  Content-Type: application/json
+  {
+    error: "An error occurred while fetching order parts."
+  }
 ```
 </details>
 
@@ -1340,8 +1411,14 @@ for creating a new order part, such as order id, part id.
     error: 'Invalid or missing data in the request.'
   }
 
-   HTTP/1.1 500 Internal Server Error
-   Content-Type: application/json
+  HTTP/1.1 409 Conflict
+  Content-Type: application/json
+  {
+    error: 'This part already exists in this order'
+  }
+
+  HTTP/1.1 500 Internal Server Error
+  Content-Type: application/json
   {
     error: "An error occurred while creating a part for order."
   }
@@ -1393,7 +1470,13 @@ Example request body:
     error: 'Order part not found'
   }
 
-   HTTP/1.1 500 Internal Server Error
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json
+  {
+    error: 'This part doesn't exist'
+  }
+
+  HTTP/1.1 500 Internal Server Error
   Content-Type: application/json
   {
     error: "An error occurred while updating the order part."
@@ -1489,11 +1572,17 @@ role: The role or access level of the user.
   HTTP/1.1 400 Bad Request
   Content-Type: application/json
   {
-    "message": "Email is already taken, please use another email"
+    "message": "User with the same email already exists"
   }
 
-   HTTP/1.1 500 Internal Server Error
-   Content-Type: application/json
+  HTTP/1.1 400 Bad Request
+  Content-Type: application/json
+  {
+    "message": "User with the same phonenumber already exists"
+  }
+
+  HTTP/1.1 500 Internal Server Error
+  Content-Type: application/json
   {
     error: "Registration error."
   }
