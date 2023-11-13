@@ -17,8 +17,6 @@ class AuthController {
         }
     }
 
-
-
     async login(request, response) {
         const { email, password } = request.body;
 
