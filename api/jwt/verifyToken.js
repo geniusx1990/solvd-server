@@ -1,11 +1,10 @@
-const base64url = require('base64url');
 const { calculateSignature } = require('./sha256');
-
+const { base64urlDecode } = require('./base64UrlEncode');
 function verifyJwtToken(token, secret) {
   const [headerEncoded, payloadEncoded, signature] = token.split('.');
 
-  const header = JSON.parse(base64url.decode(headerEncoded));
-  const payload = JSON.parse(base64url.decode(payloadEncoded));
+  const header = JSON.parse(base64urlDecode(headerEncoded));
+  const payload = JSON.parse(base64urlDecode(payloadEncoded));
 
   const computedSignature = calculateSignature(headerEncoded + '.' + payloadEncoded, secret)
 

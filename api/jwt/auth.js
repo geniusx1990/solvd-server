@@ -1,6 +1,6 @@
 const base64url = require('base64url');
 const { calculateSignature } = require('./sha256');
-
+const { base64urlEncode } = require('./base64UrlEncode');
 function createJwtToken(payload, secret) {
   const header = {
     alg: 'HS256',
@@ -8,11 +8,11 @@ function createJwtToken(payload, secret) {
   };
 
 
-  const encodedHeader = base64url(JSON.stringify(header));
-  const encodedPayload = base64url(JSON.stringify(payload));
+  const encodedHeader = base64urlEncode(JSON.stringify(header));
+  const encodedPayload = base64urlEncode(JSON.stringify(payload));
 
   const signature = calculateSignature(encodedHeader + '.' + encodedPayload, secret)
-  
+
   return encodedHeader + '.' + encodedPayload + '.' + signature;
 }
 
