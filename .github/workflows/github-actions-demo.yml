@@ -1,0 +1,26 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        node-version: [ 18.x ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Starting Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Set working directory
+        run: cd ./api
+      - name: install modules
+        run: npm install
+        working-directory: ./api
+      - name: test project
+        run: npm run test
+        working-directory: ./api
+      - name: test coverage
+        run: npm run coverage
+        working-directory: ./api

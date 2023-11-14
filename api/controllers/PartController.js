@@ -1,0 +1,107 @@
+const PartService = require('../services/partService');
+
+class PartController {
+
+    async getParts(request, response) {
+        const { mark_id, vehicle_year } = request.query;
+
+        try {
+            if (mark_id && vehicle_year) {
+                const filteredParts = await PartService.getPartsForVehicle(mark_id, vehicle_year);
+                response.status(200).json(filteredParts);
+            } else {
+                const parts = await PartService.getAllParts();
+                response.status(200).json(parts);
+            }
+        } catch (error) {
+            console.error("Error fetching parts:", error);
+            response.status(500).json({ error: "An error occurred while fetching parts." });
+        }
+    }
+
+    async createPart(request, response) {
+        const { part_name, description, price, availability, repair_cost, repair_time, vehicle_id } = request.body;
+        if (!part_name || !price || !availability || !repair_cost || !repair_time || !vehicle_id || isNaN(vehicle_id) || isNaN(price) || price <= 0 || isNaN(repair_cost) || repair_cost <= 0) {
+            return response.status(400).json({ error: 'Invalid input. Please provide valid data and a positive price.' });
+        }
+
+        try {
+            const newPart = await PartService.createPart(part_name, description, price, availability, repair_cost, repair_time, vehicle_id);
+            if (newPart === null) {
+                return response.status(404).json({ error: "This vehicle does not exist." });
+            } else if (newPart === false) {
+                return response.status(409).json({ error: "Part with the same name for this vehicle already exists." });
+            }
+            response.status(201).json({
+                part: newPart,
+                message: 'Part created successfully',
+            });
+        } catch (error) {
+            console.error('Error creating part:', error);
+            response.status(500).json({ error: 'An error occurred while creating a part.' });
+        }
+    }
+
+    async getPart(request, response) {
+        const partId = request.params.id;
+        try {
+            const part = await PartService.getPartByID(partId);
+            if (part === null) {
+                return response.status(404).json({ error: "Part not found." });
+            } else {
+                response.status(200).json(part);
+            }
+        } catch (error) {
+            console.error("Error fetching part:", error);
+            response.status(500).json({ error: "An error occurred while fetching the part." });
+        }
+    }
+
+    async updatePart(request, response) {
+        const partData = request.body;
+        const { id, part_name, description, price, availability, repair_cost, repair_time, vehicle_id } = partData;
+        if (!id) {
+            return response.status(400).json({ message: 'ID not specified' });
+        }
+
+        try {
+            const updatedPart = await PartService.updatePart(id, part_name, description, price, availability, repair_cost, repair_time, vehicle_id);
+
+            if (updatedPart === true) {
+                return response.status(404).json({ error: "This vehicle does not exist." });
+            } else if (updatedPart === false) {
+                return response.status(409).json({ error: "Part with the same name for this vehicle already exists." });
+            } else if (updatedPart === null) {
+                return response.status(404).json({ error: 'Part not found' });
+            }
+            response.status(200).json({
+                part: updatedPart,
+                message: 'Part updated successfully'
+            });
+        } catch (error) {
+            return response.status(500).json({ error: 'An error occurred while updating the part' });
+        }
+    }
+
+    async deletePart(request, response) {
+        const partId = request.params.id
+        try {
+            const deletedPart = await PartService.deletePartById(partId);
+
+            if (deletedPart === null) {
+                return response.status(404).json({ error: 'Part not found' });
+            }
+            response.status(200).json({
+                part: deletedPart,
+                message: 'Part deleted successfully',
+            });
+        } catch (error) {
+            console.error('Error deleting part:', error);
+            response.status(500).json({ error: 'An error occurred while deleting the part' });
+        }
+    }
+
+
+}
+
+module.exports = new PartController();
