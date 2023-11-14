@@ -16,6 +16,11 @@ app.use(
   })
 )
 
+const corsOptions = {
+  origin: 'https://asa-project.netlify.app',
+};
+
+app.use(cors(corsOptions));
 app.use('/api', v1Router);
 
 async function startApp() {
