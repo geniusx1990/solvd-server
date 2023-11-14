@@ -1,3 +1,4 @@
+const {base64urlEncode} = require("./base64UrlEncode");
 let uint8Array = Uint8Array;
 let uint32Array = Uint32Array;
 
@@ -161,11 +162,10 @@ function hmacSha256(key, message) {
 
 
 function calculateSignature(message, secretKey) {
-
-    let hmac = hmacSha256(secretKey, message)
+    let hmac = hmacSha256(secretKey, message);
     let byteArray = Array.from(hmac);
-    let base64String = btoa(String.fromCharCode.apply(null, byteArray));
-    return base64String.replace(/\+/g, '-').replace(/\//g, '_').slice(0, -1);
+    let base64String = base64urlEncode(String.fromCharCode.apply(null, byteArray));
+    return base64String.slice(0, -1); // Убираем лишний символ '='
 }
 
 module.exports = {
