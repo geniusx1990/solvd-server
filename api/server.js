@@ -10,11 +10,12 @@ app.use(cors());
 const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-)
+// app.use(
+//  bodyParser.urlencoded({
+//    extended: true,
+//  })
+// )
+app.use(express.json());
 
 const corsOptions = {
   origin: 'https://asa-project.netlify.app',
